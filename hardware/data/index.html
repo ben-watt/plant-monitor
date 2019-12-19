@@ -1,0 +1,62 @@
+<html>
+<head></head>
+<body>
+  <form>
+    <h2>Enter a network...</h2>
+    <div class="form-group">
+        <label>SSID: </label>
+        <input id="ssid" type="text" />
+    </div>
+    <div class="form-group">
+        <label>Password: </label>
+        <input id="password" type="password" />
+    </div>
+    <button class="submit" onClick="submit()">SAVE</button>
+  </form>
+</body>
+<script>
+  function submit() {
+    console.log("button clicked");
+    var ssid = document.getElementById("ssid").value;
+    var password = document.getElementById("password").value;
+
+    fetch("/settings", 
+    { 
+        method: 'post',
+        body: JSON.stringify({
+            ssid: ssid,
+            password: password
+        })
+    })
+    .then(r => r.json)
+    .then(console.log(r));
+  }
+</script>
+<style>
+
+form {
+  margin: 50px auto 50px auto;
+  width: 300px;
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    align-items: center;
+}
+
+.submit {
+    background-color: transparent;
+    border: solid black 1px;
+    border-radius: 3px;
+    display: block;
+    margin: auto;
+}
+
+.submit:hover {
+    cursor: pointer;
+}
+
+</style>
+</html>
