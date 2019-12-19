@@ -8,15 +8,41 @@
 #include <Esp.h>
 #include <stdio.h>
 #include "Adafruit_Si7021.h"
+#include "sensitive.h"
+#include "FirebaseESP8266.h"
+
+
+class FireBase {
+  private:
+    FirebaseData firebaseData;
+    FirebaseJson json;
+
+  public:
+    void SendData(const char* data) {
+      Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+      Firebase.setMaxRetry(firebaseData, 3);
+      
+      json.add("humidity", 0);
+      json.add("temperature", 0);
+
+      if (Firebase.pushJSON(firebaseData, "/test/append", json)) {
+
+        Serial.println(firebaseData.dataPath());
+        Serial.println(firebaseData.pushName());
+        Serial.println(firebaseData.dataPath() + "/"+ firebaseData.pushName());
+
+      } else {
+        Serial.println(firebaseData.errorReason());
+      }
+    }
+}
 
 class Sensor {
   public:
-    void ReadSensor() {
+    char * ReadSensor() {
       Adafruit_Si7021 sensor = Adafruit_Si7021();
     	if (!sensor.begin()) {
         Serial.println("Did not find Si7021 sensor!");
-        while (true)
-          ;
   	  }
 
       Serial.print("Found model ");
@@ -138,18 +164,6 @@ class MyWifi {
 
 ESP8266WebServer server;
 
-
-void handleMoist() {
-  const int PIN = A0;
-  Serial.print("Reading moistness level...");
-  int moistness = analogRead(PIN);
-  char *intStr = itoa(moistness, intStr, 10);
-  auto str = String(intStr);
-  Serial.print("Moistness: ");
-  Serial.println(*intStr);
-  server.send(200, "text/plain", str);
-}
-
 void handleSettingsUpdate() {
   String data = server.arg("plain");
   StaticJsonDocument<256> doc;
@@ -190,7 +204,6 @@ void setup() {
   }
 
   server.on("/", HTTP_GET, serveIndexFile);
-  server.on("/moist", HTTP_GET, handleMoist);
   server.on("/settings", HTTP_POST, handleSettingsUpdate);
   server.begin();
 }
@@ -202,8 +215,12 @@ void loop() {
   } else {
     int64_t seconds = 10e6;
     delay(10);
+    
     Sensor s;
-    s.ReadSensor();
+    Firebase f;
+    auto data = s.ReadSensor();
+    f.SendData(data);
+
     Serial.print("Going to sleep...");
     ESP.deepSleep(seconds);
   }
