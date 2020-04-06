@@ -9,6 +9,7 @@
 
 FirebaseData firebaseData;
 FirebaseJson json;
+ADC_MODE(ADC_VCC);
 
 void printResult(FirebaseData &data);
 
@@ -74,15 +75,18 @@ void setup()
 
 void loop()
 {
-  Sensor s;
+  
+  Sensor s; 
   SensorResult data = s.ReadSensor();
-
-  json.clear();
+  int voltage = ESP.getVcc();
   timeClient.update();
 
-  json.add("epoctime", String(timeClient.getEpochTime()));
+  json.clear();
+
+  json.add("epoch_time", String(timeClient.getEpochTime()));
   json.add("temperature", data.temperature);
   json.add("humidity", data.humidity);
+  json.add("voltage", voltage);
 
   String jsonToStr;
   json.toString(jsonToStr, true);

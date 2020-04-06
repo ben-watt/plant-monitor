@@ -40,7 +40,7 @@
             var temperature = document.getElementById("temperature");
 
             var reading = d.val();
-            lastReading.innerText = new Date(reading.epoctime * 1000);
+            lastReading.innerText = new Date(reading.epoch_time * 1000);
             humidity.innerText = reading.humidity.toFixed(2);
             temperature.innerText = reading.temperature.toFixed(2);
 
