@@ -110,7 +110,7 @@ void loop()
   }
 
   Serial.println("Going to sleep...");
-  int64_t seconds = 10e6;
+  int64_t seconds = 3.6e9;
   ESP.deepSleep(seconds);
   delay(1000);
 }
