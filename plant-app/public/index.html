@@ -17,38 +17,101 @@
 
     <style media="screen">
       body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      body {
+        overflow-x: hidden;
+      }
+
+      #app {
+        --pageIndex: 0;
+        display: flex;
+      }
+
+      .page {
+        min-width: 100%;
+        background-color: teal;      
+        transform: translate(calc(var(--pageIndex)*-100%));
+        transition-duration: 50ms;
+      }
+
+      .container {
+        background-color: red;
+        height: 10em;
+      }
     </style>
   </head>
   <body>
-    <div>
-      <div id="temperature"></div>
-      <div id="humidity"></div>
-      <div id="last-reading"></div>
+    <div id="app">
+      <div class="page">
+        <div class="header">
+          <div id="last-reading">Thu Apr 09 2020 20:47:12 GMT+0100 (British Summer Time)</div>
+          <div id="battery"></div>
+        </div>
+        <div class="container">
+          <div id="temperature">27.27</div>
+        </div>
+      </div>
+      <div class="page">
+        <div id="humidity">42.85</div>
+      </div>
     </div>
-    <script>
+    <script>   
+
+      let swipeHandler = (function swiper() {
+
+        let touchStartPostion = 0;
+        let app = document.getElementById('app');
+        app.addEventListener('touchstart', swipe, false);
+        app.addEventListener('touchend', swipe, false);
+
+        function swipe(event) {
+          console.log(event);
+
+          if(event.type == 'touchstart') {
+            touchStartPosition = event.changedTouches[0].pageX;
+            return;
+          }
+
+          if(event.type == 'touchend') {
+            var touchEndPosition = event.changedTouches[0].pageX;
+            
+            if(touchStartPosition < touchEndPosition) {
+              console.log('left-swipe');
+              app.style.setProperty('--pageIndex', 0)
+            } else {
+              console.log('right-swipe');
+              app.style.setProperty('--pageIndex', 1)
+            }
+
+            touchStartPostion = 0;
+            return;
+          }
+        };
+
+      })();   
+
       document.addEventListener('DOMContentLoaded', function() {
 
-        try {
-          let app = firebase.app();
-          var db = firebase.database();
-          var data = db.ref("greenhouse/data").limitToLast(1);
+        // try {
+        //   let app = firebase.app();
+        //   var db = firebase.database();
+        //   var data = db.ref("greenhouse/data").limitToLast(1);
 
-          data.on('child_added', function(d) {
+        //   data.on('child_added', function(d) {
 
-            var lastReading = document.getElementById("last-reading");
-            var humidity = document.getElementById("humidity");
-            var temperature = document.getElementById("temperature");
+        //     var lastReading = document.getElementById("last-reading");
+        //     var humidity = document.getElementById("humidity");
+        //     var temperature = document.getElementById("temperature");
 
-            var reading = d.val();
-            lastReading.innerText = new Date(reading.epoch_time * 1000);
-            humidity.innerText = reading.humidity.toFixed(2);
-            temperature.innerText = reading.temperature.toFixed(2);
+        //     var reading = d.val();
+        //     lastReading.innerText = new Date(reading.epoch_time * 1000);
+        //     humidity.innerText = reading.humidity.toFixed(2);
+        //     temperature.innerText = reading.temperature.toFixed(2);
 
-          });
+        //   });
 
-        } catch (e) {
-          console.error(e);
-        }
+        // } catch (e) {
+        //   console.error(e);
+        // }
       });
     </script>
   </body>
