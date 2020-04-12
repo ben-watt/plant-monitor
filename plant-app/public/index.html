@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Greenhouse monitor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/7.13.2/firebase-app.js"></script>
@@ -19,6 +20,8 @@
       body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
       body {
         overflow-x: hidden;
+        font-weight: 300;
+        background-color: white;
       }
 
       #app {
@@ -26,46 +29,155 @@
         display: flex;
       }
 
+      .page-icons {
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+      }
+
+      .page-icon {
+        margin: 5px 3px 5px 3px;
+        border-radius: 1em;
+        width: 5px;
+        height: 5px;
+        border: 1px solid grey;
+      }
+
+      .page-icon.active {
+        background-color: grey;
+      }
+
       .page {
         min-width: 100%;
-        background-color: teal;      
+        min-height: 100vh;     
         transform: translate(calc(var(--pageIndex)*-100%));
         transition-duration: 50ms;
       }
 
-      .container {
-        background-color: red;
-        height: 10em;
+      #container {
+        position: relative;
+        background-image: linear-gradient(50deg, #0D38D1, #701872);
+        color: white;
+        height: 20em;
+      }
+
+      .headline-figure {
+        position: absolute;
+        left: 0.7em;
+        bottom: 0.5em;
+        font-size: 8em;
+        z-index: 1;
+      }
+
+      .header-image {
+        width: 15em;
+        position: absolute;
+        right: 10px;
+        bottom: 1px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+      }
+
+      #battery > img {
+        height: 0.9em;
+      }
+
+      #history {
+        padding: 10px;
+      }
+
+      .day-row {
+        margin: 5px 10px 5px 10px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .day-row > div {
+        padding: 10px;
+      }
+
+      #day-line {
+        background-color: lightgrey;
+        height: 1px;
       }
     </style>
   </head>
   <body>
     <div id="app">
       <div class="page">
-        <div class="header">
-          <div id="last-reading">Thu Apr 09 2020 20:47:12 GMT+0100 (British Summer Time)</div>
-          <div id="battery"></div>
-        </div>
-        <div class="container">
-          <div id="temperature">27.27</div>
-        </div>
+        <section id="container">
+          <div class="header">
+            <div id="last-reading">Thu Apr 09 2020 20:47:12 GMT+0100 (British Summer Time)</div>
+            <div id="battery">
+              <img src="./battery.svg"></img>
+            </div>
+          </div>
+          <div id="temperature" class="headline-figure">27°</div>
+          <img class="header-image" src="./camping-tent.svg"></img>
+        </section>
+        <section id="history">
+          <div class="day-row">
+            <div>Mon</div>
+            <span id=day-line style="width: 100%"></span>
+            <div>15°</div>
+          </div>
+        </section>
       </div>
       <div class="page">
-        <div id="humidity">42.85</div>
+        <!-- <div class="container">
+          <div class="header">
+            <div id="last-reading">Thu Apr 09 2020 20:47:12 GMT+0100 (British Summer Time)</div>
+            <div id="battery">
+              <img src="./battery.svg"></img>
+            </div>
+          </div>
+          <div id="temperature" class="headline-figure">42%</div>
+          <img class="header-image" src="./camping-tent.svg"></img>
+        </div> -->
+      </div>
+      <div class="page-icons">
+        <div class="page-icon active"></div>
+        <div class="page-icon"></div>
       </div>
     </div>
-    <script>   
+    <script>
+
+
+      let pageManager = (function() {
+        let app = document.getElementById('app');
+        let pageIcons = document.getElementsByClassName("page-icon");
+
+        app.addEventListener('left-swipe', function(ev) {
+          app.style.setProperty('--pageIndex', 0);
+          pageIcons[0].classList.add("active");
+          pageIcons[1].classList.remove("active");
+        })
+
+        app.addEventListener('right-swipe', function(ev) {
+          app.style.setProperty('--pageIndex', 1);
+          pageIcons[1].classList.add("active");
+          pageIcons[0].classList.remove("active");
+        })
+
+      })();
 
       let swipeHandler = (function swiper() {
-
         let touchStartPostion = 0;
+
         let app = document.getElementById('app');
         app.addEventListener('touchstart', swipe, false);
         app.addEventListener('touchend', swipe, false);
 
         function swipe(event) {
-          console.log(event);
-
           if(event.type == 'touchstart') {
             touchStartPosition = event.changedTouches[0].pageX;
             return;
@@ -75,11 +187,9 @@
             var touchEndPosition = event.changedTouches[0].pageX;
             
             if(touchStartPosition < touchEndPosition) {
-              console.log('left-swipe');
-              app.style.setProperty('--pageIndex', 0)
+              app.dispatchEvent(new Event('left-swipe'));
             } else {
-              console.log('right-swipe');
-              app.style.setProperty('--pageIndex', 1)
+              app.dispatchEvent(new Event('right-swipe'));
             }
 
             touchStartPostion = 0;
