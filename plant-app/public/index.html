@@ -9,10 +9,7 @@
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/7.13.2/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/7.13.2/firebase-auth.js"></script>
     <script defer src="/__/firebase/7.13.2/firebase-database.js"></script>
-    <script defer src="/__/firebase/7.13.2/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/7.13.2/firebase-storage.js"></script>
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
     <script defer src="https://d3js.org/d3.v5.min.js"></script>
@@ -229,7 +226,6 @@
         let touchStartPostionX = 0;
         let touchStartPositionY = 0;
 
-
         let app = document.getElementById('app');
         app.addEventListener('touchstart', swipe, false);
         app.addEventListener('touchend', swipe, false);
@@ -294,6 +290,10 @@
             }
           ]
         }
+      }
+      
+      function createElement(element, attributes) {
+        return Object.assign(docuemnt.createElement(element), attributes)
       }
 
 

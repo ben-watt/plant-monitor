@@ -1,0 +1,159 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body {
+  overflow-x: hidden;
+  font-weight: 300;
+  background-color: white;
+}
+
+#app {
+  --pageIndex: 0;
+  display: flex;
+}
+
+.page-icons {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+
+.page-icon {
+  margin: 5px 3px 5px 3px;
+  border-radius: 1em;
+  width: 5px;
+  height: 5px;
+  border: 1px solid grey;
+}
+
+.page-icon.active {
+  background-color: grey;
+}
+
+.page {
+  min-width: 100%;
+  min-height: 100vh;     
+  transform: translate(calc(var(--pageIndex)*-100%));
+  transition-duration: 50ms;
+}
+
+#container {
+  position: relative;
+  background-image: linear-gradient(50deg, #0D38D1, #701872);
+  color: white;
+}
+
+.headline-figures {
+  display: flex;
+  align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1em;
+}
+
+.headline-figure {
+  font-size: 8em;
+  z-index: 1;
+}
+
+.header-image {
+  width: 15em;
+  justify-self: flex-end;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+#battery > img {
+  height: 0.9em;
+}
+
+.day-row {
+  padding: 5px 15px 5px 15px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+}
+
+.day-row > div {
+  padding: 10px;
+}
+
+#day-line {
+  background-color: lightgrey;
+  height: 1px;
+}
+
+.arrow {
+  visibility: hidden;
+  padding: 0px;
+  width: 5px;
+  height: 5px;
+  border-bottom: 1px solid grey;
+  border-left: 1px solid grey;
+  transform: rotate(45deg);
+  transition-duration: 200ms;
+  transition-property: visibility, transform;
+}
+
+.day-row.active .arrow {
+  visibility: visible;
+  transform: rotate(-45deg);
+  transition-duration: 300ms;
+}
+
+.chart {
+  display: hidden;
+  height: 0em;
+  box-shadow: inset 0px 0px 3px 1px grey;
+  transition-duration: 300ms;
+}
+
+.day-row.active ~ .chart {
+  display: block;
+  height: 10em;
+  transition-duration: 300ms;
+}
