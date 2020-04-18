@@ -61,11 +61,17 @@ class App extends React.Component  {
       <div id="app">
         <PageContainer>
             <Page>
-              <Header value={this.state.lastReading.temperature} date={this.state.lastReading.date}/>
+              <Header 
+                value={this.state.lastReading.temperature} 
+                date={this.state.lastReading.date} 
+                image={"./camping-tent.svg"}/>
               <History />
             </Page>
             <Page>
-              <Header value={this.state.lastReading.humidity} date={this.state.lastReading.date} />
+              <Header 
+                value={this.state.lastReading.humidity} 
+                date={this.state.lastReading.date} 
+                image={"./water.svg"} />
               <History />
             </Page>
         </PageContainer>

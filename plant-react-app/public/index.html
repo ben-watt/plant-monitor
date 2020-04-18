@@ -45,8 +45,8 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <script>
-      let pageManager = (function() {
-      let app = document.getElementById('root');
+      let pageManager = (function(elementId) {
+      let app = document.getElementById(elementId);
       let pageIcons = document.getElementsByClassName("page-icon");
 
       app.addEventListener('left-swipe', function(ev) {
@@ -61,13 +61,13 @@
         pageIcons[0].classList.remove("active");
       })
 
-    })();
+    })('app');
 
-    let swipeHandler = (function swiper() {
+    let swipeHandler = (function swiper(elementId) {
       let touchStartPostionX = 0;
       let touchStartPositionY = 0;
 
-      let app = document.getElementById('root');
+      let app = document.getElementById(elementId);
       app.addEventListener('touchstart', swipe, false);
       app.addEventListener('touchend', swipe, false);
 
@@ -103,7 +103,7 @@
           return;
         }
       };
-    })();
+    })('app');
     </script>
   </body>
 </html>
