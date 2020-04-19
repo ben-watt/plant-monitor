@@ -1,4 +1,5 @@
 import React from 'react'
+import Page from './Page'
 
 class PageContainer extends React.Component {
     constructor(props) {
@@ -6,7 +7,7 @@ class PageContainer extends React.Component {
 
         let pageCount = 0;
         props.children.forEach(child => {
-            if(child.type.name == "Page" ) {
+            if(child.type.name == Page.name) {
                 pageCount++;
             }
         })
@@ -31,7 +32,6 @@ class PageContainer extends React.Component {
     }
 
     handleRightSwipe = () => {
-        console.log(this.state)
         if(this.state.currentPage < this.state.pageCount) {
             this.setState({ currentPage: this.state.currentPage + 1})
             var pgContainer = document.getElementsByClassName("page-container")[0];
@@ -41,7 +41,7 @@ class PageContainer extends React.Component {
 
     render(){
         let pageIcons = this.props.children.map((child, i) => {
-            if(child.type.name == "Page") {
+            if(child.type.name == Page.name) {
                 let classes = ["page-icon"];
                 if(i + 1 == this.state.currentPage) {
                     classes.push("active");

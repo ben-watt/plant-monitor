@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 const Page = (props) => {
     return (
-        <div className="page">
+        <div  className="page">
             {props.children}
         </div>
     );
