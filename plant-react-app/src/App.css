@@ -43,9 +43,16 @@ body {
   background-color: white;
 }
 
-#app {
+.page-container {
   --pageIndex: 0;
   display: flex;
+}
+
+.page {
+  min-width: 100%;
+  min-height: 100vh;     
+  transform: translate(calc(var(--pageIndex)*-100%));
+  transition-duration: 50ms;
 }
 
 .page-icons {
@@ -66,13 +73,6 @@ body {
 
 .page-icon.active {
   background-color: grey;
-}
-
-.page {
-  min-width: 100%;
-  min-height: 100vh;     
-  transform: translate(calc(var(--pageIndex)*-100%));
-  transition-duration: 50ms;
 }
 
 #container {

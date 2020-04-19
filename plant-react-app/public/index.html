@@ -45,31 +45,12 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <script>
-      let pageManager = (function(elementId) {
-      let app = document.getElementById(elementId);
-      let pageIcons = document.getElementsByClassName("page-icon");
-
-      app.addEventListener('left-swipe', function(ev) {
-        app.style.setProperty('--pageIndex', 0);
-        pageIcons[0].classList.add("active");
-        pageIcons[1].classList.remove("active");
-      })
-
-      app.addEventListener('right-swipe', function(ev) {
-        app.style.setProperty('--pageIndex', 1);
-        pageIcons[1].classList.add("active");
-        pageIcons[0].classList.remove("active");
-      })
-
-    })('app');
-
-    let swipeHandler = (function swiper(elementId) {
+    let swipeHandler = (function swiper() {
       let touchStartPostionX = 0;
       let touchStartPositionY = 0;
 
-      let app = document.getElementById(elementId);
-      app.addEventListener('touchstart', swipe, false);
-      app.addEventListener('touchend', swipe, false);
+      document.addEventListener('touchstart', swipe, false);
+      document.addEventListener('touchend', swipe, false);
 
       function swipe(event) {
         if(event.type == 'touchstart') {
@@ -85,17 +66,15 @@
           var horisontalSwipe = touchStartPositionX - touchEndPositionX;
           var verticalSwipe = touchStartPositionY - touchEndPositionY;
 
-          console.log(Math.abs(horisontalSwipe));
-
           if(Math.abs(verticalSwipe) > Math.abs(horisontalSwipe) 
             || Math.abs(horisontalSwipe) < 20) {
               return;
             }
 
           if(horisontalSwipe < 0) {
-            app.dispatchEvent(new Event('left-swipe'));
+            document.dispatchEvent(new Event('left-swipe'));
           } else {
-            app.dispatchEvent(new Event('right-swipe'));
+            document.dispatchEvent(new Event('right-swipe'));
           }
 
           touchStartPostionX = 0;
@@ -103,7 +82,7 @@
           return;
         }
       };
-    })('app');
+    })();
     </script>
   </body>
 </html>

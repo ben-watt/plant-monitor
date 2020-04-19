@@ -4,26 +4,59 @@ class PageContainer extends React.Component {
     constructor(props) {
         super(props);
 
+        let pageCount = 0;
+        props.children.forEach(child => {
+            if(child.type.name == "Page" ) {
+                pageCount++;
+            }
+        })
+
         this.state = {
-            pageCount: 0,
-            activePageIndex: 0
+            pageCount: pageCount,
+            currentPage: 1
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener("left-swipe", this.handleLeftSwipe);
+        document.addEventListener("right-swipe", this.handleRightSwipe);
+    }
+
+    handleLeftSwipe = () => {
+        if(this.state.currentPage >= this.state.pageCount) {
+            this.setState({ currentPage: this.state.currentPage - 1})
+            var pgContainer = document.getElementsByClassName("page-container")[0];
+            pgContainer.style.setProperty("--pageIndex", this.state.currentPage -1);
+        }
+    }
+
+    handleRightSwipe = () => {
+        console.log(this.state)
+        if(this.state.currentPage < this.state.pageCount) {
+            this.setState({ currentPage: this.state.currentPage + 1})
+            var pgContainer = document.getElementsByClassName("page-container")[0];
+            pgContainer.style.setProperty("--pageIndex", this.state.currentPage -1);
         }
     }
 
     render(){
         let pageIcons = this.props.children.map((child, i) => {
             if(child.type.name == "Page") {
-                return <div key={i} className="page-icon"></div>
+                let classes = ["page-icon"];
+                if(i + 1 == this.state.currentPage) {
+                    classes.push("active");
+                }
+                return <div key={i} className={classes.join(" ")}></div>
             }
         });
 
         return (
-            <>
+            <div className="page-container">
                 {this.props.children}
                 <div className="page-icons">
                     {pageIcons}
                 </div>
-            </>
+            </div>
         )
     }
 }
