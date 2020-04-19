@@ -8,9 +8,10 @@ import History from './History';
 import PageContainer from './PageContainer';
 
 const parseReading = (reading) =>  ({
-  date: new Date(reading.epoch_time * 1000).toString(),
+  date: new Date(reading.epoch_time * 1000).toLocaleString(),
   humidity: reading.humidity.toFixed(0),
-  temperature: reading.temperature.toFixed(0)
+  temperature: reading.temperature.toFixed(0),
+  voltage: reading.voltage.toString() ?? "Unknown"
 })
 
 const toggleClass = (element, className) => {
@@ -27,7 +28,7 @@ class App extends React.Component  {
     this.state = {
       lastReading: {
         date: "",
-        humidity: "humid",
+        humidity: "--",
         temperature: "--"
       }
     }
@@ -55,6 +56,28 @@ class App extends React.Component  {
         }
     });
   }
+
+  getTemperature() {
+    if(true) {
+      return <Header 
+        leftColour="#0D38D1"
+        rightColour="#701872"
+        value={this.state.lastReading.temperature} 
+        suffex={"°C"}
+        date={this.state.lastReading.date} 
+        image={"./camping-tent.svg"}
+        bottom />
+    } else {
+      return <Header 
+        leftColour="#0D38D1"
+        rightColour="#701872"
+        value={this.state.lastReading.temperature} 
+        suffex={"°C"}
+        date={this.state.lastReading.date} 
+        image={"./camping-tent.svg"}
+        bottom />
+    }
+  }
   
   render() {
     return (
@@ -62,14 +85,21 @@ class App extends React.Component  {
         <PageContainer>
             <Page>
               <Header 
+                leftColour="#0D38D1"
+                rightColour="#701872"
                 value={this.state.lastReading.temperature} 
+                suffex={"°C"}
                 date={this.state.lastReading.date} 
-                image={"./camping-tent.svg"}/>
+                image={"./camping-tent.svg"}
+                bottom />
               <History />
             </Page>
             <Page>
               <Header 
-                value={this.state.lastReading.humidity} 
+                leftColour="#1FD7FF"
+                rightColour="#EBECED"
+                value={this.state.lastReading.humidity}
+                suffex={"%"}
                 date={this.state.lastReading.date} 
                 image={"./water.svg"} />
               <History />
