@@ -47,7 +47,7 @@ const Header = (props) => {
     return (
         <Section leftColour={props.leftColour} rightColour={props.rightColour}>
             <HeaderContainer>
-                <div id="last-reading">{props.date}</div>
+                <div id="last-reading">{props.date} ago</div>
                     <div id="battery">
                     <img src="./battery.svg"></img>
                 </div>

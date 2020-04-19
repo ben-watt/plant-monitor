@@ -6,9 +6,10 @@ import Page from './Page';
 import Header from './Header';
 import History from './History';
 import PageContainer from './PageContainer';
+import { formatDistance, getHours } from 'date-fns'
 
 const parseReading = (reading) =>  ({
-  date: new Date(reading.epoch_time * 1000).toLocaleString(),
+  date: new Date(reading.epoch_time * 1000),
   humidity: reading.humidity.toFixed(0),
   temperature: reading.temperature.toFixed(0),
   voltage: reading.voltage.toString() ?? "Unknown"
@@ -27,7 +28,7 @@ class App extends React.Component  {
     super(props);
     this.state = {
       lastReading: {
-        date: "",
+        date: new Date(),
         humidity: "--",
         temperature: "--"
       }
@@ -58,23 +59,25 @@ class App extends React.Component  {
   }
 
   getTemperature() {
-    if(true) {
+    var date = new Date();
+    var hours = getHours(date);
+    if(hours > 19 || hours < 5) {
       return <Header 
         leftColour="#0D38D1"
         rightColour="#701872"
         value={this.state.lastReading.temperature} 
         suffex={"°C"}
-        date={this.state.lastReading.date} 
+        date={formatDistance(this.state.lastReading.date, new Date())} 
         image={"./camping-tent.svg"}
         bottom />
     } else {
       return <Header 
-        leftColour="#0D38D1"
-        rightColour="#701872"
+        leftColour="#D1190D"
+        rightColour="#F6C821"
         value={this.state.lastReading.temperature} 
         suffex={"°C"}
-        date={this.state.lastReading.date} 
-        image={"./camping-tent.svg"}
+        date={formatDistance(this.state.lastReading.date, new Date())} 
+        image={"./beach.svg"}
         bottom />
     }
   }
@@ -84,14 +87,7 @@ class App extends React.Component  {
       <div id="app">
         <PageContainer>
             <Page>
-              <Header 
-                leftColour="#0D38D1"
-                rightColour="#701872"
-                value={this.state.lastReading.temperature} 
-                suffex={"°C"}
-                date={this.state.lastReading.date} 
-                image={"./camping-tent.svg"}
-                bottom />
+              {this.getTemperature()}
               <History />
             </Page>
             <Page>
@@ -100,7 +96,7 @@ class App extends React.Component  {
                 rightColour="#EBECED"
                 value={this.state.lastReading.humidity}
                 suffex={"%"}
-                date={this.state.lastReading.date} 
+                date={formatDistance(this.state.lastReading.date, new Date())} 
                 image={"./water.svg"} />
               <History />
             </Page>
