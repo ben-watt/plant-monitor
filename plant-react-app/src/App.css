@@ -82,7 +82,7 @@
   transition-duration: 300ms;
 }
 
-.day-row.active ~ .chart {
+.day-row.active + .chart {
   display: block;
   height: 10em;
   transition-duration: 300ms;

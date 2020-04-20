@@ -7,6 +7,7 @@ import Header from './Header';
 import History from './History';
 import PageContainer from './PageContainer';
 import { formatDistance, getHours } from 'date-fns'
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 const parseReading = (reading) =>  ({
   date: new Date(reading.epoch_time * 1000),
@@ -23,6 +24,13 @@ const toggleClass = (element, className) => {
   }
 }
 
+const groupBy = (array, valueAccessor) => {
+  array.reduce((acc, curr) => {
+    (acc[valueAccessor(curr)] = acc[valueAccessor(curr)] || []).valueAccessor(curr);
+    return acc;
+  })
+}
+
 class App extends React.Component  {
   constructor(props) {
     super(props);
@@ -31,7 +39,8 @@ class App extends React.Component  {
         date: new Date(),
         humidity: "--",
         temperature: "--"
-      }
+      },
+      history: {}
     }
   }
 
@@ -42,6 +51,28 @@ class App extends React.Component  {
     data.on('child_added', function(d) {
       var reading = d.val();
       this.setState({ lastReading : parseReading(reading)})
+    }.bind(this));
+
+    var data = db.ref("greenhouse/data").limitToLast(100);
+
+    data.on('child_added', function(d) {
+      var reading = d.val();
+      var parsedReading = parseReading(reading);
+      var dateKey = parsedReading.date.toISOString().substring(0,10);
+
+      this.setState(prevState => { 
+        if(prevState.history[dateKey] != null) {
+          prevState.history[dateKey].push(parsedReading);
+        } else {
+          prevState.history[dateKey] = [];
+          prevState.history[dateKey].push(parsedReading);
+        }
+
+        return {
+          ...prevState,
+          history: prevState.history 
+        }
+      })
     }.bind(this));
   }
 
@@ -83,12 +114,20 @@ class App extends React.Component  {
   }
   
   render() {
+
+    const history = []
+    for(var dateGroup in this.state.history) {
+      history.push(<History key={dateGroup.toString()} />)
+    }
+
     return (
       <div id="app">
         <PageContainer>
             <Page>
               {this.getTemperature()}
-              <History />
+              <section id="history">
+                { history }
+              </section>
             </Page>
             <Page>
               <Header 
