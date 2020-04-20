@@ -7,7 +7,6 @@ import Header from './Header';
 import History from './History';
 import PageContainer from './PageContainer';
 import { formatDistance, getHours } from 'date-fns'
-import { isCompositeComponent } from 'react-dom/test-utils';
 
 const parseReading = (reading) =>  ({
   date: new Date(reading.epoch_time * 1000),
@@ -22,13 +21,6 @@ const toggleClass = (element, className) => {
   } else {
     element.classList.remove(className);
   }
-}
-
-const groupBy = (array, valueAccessor) => {
-  array.reduce((acc, curr) => {
-    (acc[valueAccessor(curr)] = acc[valueAccessor(curr)] || []).valueAccessor(curr);
-    return acc;
-  })
 }
 
 class App extends React.Component  {
