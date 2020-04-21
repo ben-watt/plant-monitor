@@ -10,8 +10,8 @@ import { formatDistance, getHours } from 'date-fns'
 
 const parseReading = (reading) =>  ({
   date: new Date(reading.epoch_time * 1000),
-  humidity: reading.humidity.toFixed(0),
-  temperature: reading.temperature.toFixed(0),
+  humidity: parseInt(reading.humidity.toFixed(0)),
+  temperature: parseInt(reading.temperature.toFixed(0)),
   voltage: reading.voltage.toString() ?? "Unknown"
 })
 
@@ -23,6 +23,14 @@ const toggleClass = (element, className) => {
   }
 }
 
+const highestValue = (value1, value2) => {
+  return value1 > value2 ? value1 : value2;
+}
+
+const lowestValue = (value1, value2) => {
+  return value1 < value2 ? value1 : value2;
+}
+
 class App extends React.Component  {
   constructor(props) {
     super(props);
@@ -32,6 +40,10 @@ class App extends React.Component  {
         humidity: "--",
         temperature: "--"
       },
+      totalHighestTemperature: Number.MIN_SAFE_INTEGER,
+      totalHighestHumidity: Number.MIN_SAFE_INTEGER,
+      totalMinimumTemperature: Number.MAX_SAFE_INTEGER,
+      totalMinimumHumidity: Number.MAX_SAFE_INTEGER,
       history: {}
     }
   }
@@ -52,17 +64,32 @@ class App extends React.Component  {
       var parsedReading = parseReading(reading);
       var dateKey = parsedReading.date.toISOString().substring(0,10);
 
-      this.setState(prevState => { 
+      this.setState(prevState => {
         if(prevState.history[dateKey] != null) {
-          prevState.history[dateKey].push(parsedReading);
+          prevState.history[dateKey] = {
+            maxTemperature: highestValue(parsedReading.temperature, prevState.history[dateKey].maxTemperature),
+            minTemperature: lowestValue(parsedReading.temperature, prevState.history[dateKey].minTemperature),
+            maxHumidity: highestValue(parsedReading.humidity, prevState.history[dateKey].maxHumidity),
+            minHumidity: lowestValue(parsedReading.humidity, prevState.history[dateKey].minHumidity),
+            readings: prevState.history[dateKey].readings.concat(parsedReading)
+          }
         } else {
-          prevState.history[dateKey] = [];
-          prevState.history[dateKey].push(parsedReading);
+          prevState.history[dateKey] = {
+            maxTemperature: parsedReading.temperature,
+            minTemperature: parsedReading.temperature,
+            maxHumidity: parsedReading.humidity,
+            minHumidity: parsedReading.humidity,
+            readings: [parsedReading]
+          };
         }
 
         return {
           ...prevState,
-          history: prevState.history 
+          totalHighestTemperature: highestValue(prevState.totalHighestTemperature, parsedReading.temperature),
+          totalHighestHumidity: highestValue(prevState.totalHighestHumidity, parsedReading.humidity),
+          totalMinimumTemperature: lowestValue(prevState.totalMinimumTemperature, parsedReading.temperature),
+          totalMinimumHumidity: lowestValue(prevState.totalMinimumHumidity, parsedReading.humidity),
+          history: prevState.history
         }
       })
     }.bind(this));
@@ -81,7 +108,7 @@ class App extends React.Component  {
     });
   }
 
-  getTemperature() {
+  getTemperatureHeader() {
     var date = new Date();
     var hours = getHours(date);
     if(hours > 19 || hours < 5) {
@@ -104,21 +131,49 @@ class App extends React.Component  {
         bottom />
     }
   }
-  
-  render() {
 
-    const history = []
+  getTemperatureHistory() {
+    let history = []
     for(var dateGroup in this.state.history) {
-      history.push(<History key={dateGroup.toString()} />)
+      let value = this.state.history[dateGroup];
+
+      history.push(<History key={dateGroup.toString()} 
+        min={value.minTemperature} max={value.maxTemperature} readings={value.readings} />)
     }
 
+    return history;
+  }
+
+  normaliseDataZeroToOneHundred(value, min, max) {
+    return 0 + ((value - max) * (100 - 0) / (max - min))
+  }
+
+  getHumidityHistory() {
+    let history = []
+
+    console.log(this.normaliseDataZeroToOneHundred(
+      34, this.state.totalMinimumTemperature, this.state.totalHighestTemperature))
+
+    for(var dateGroup in this.state.history) {
+      let value = this.state.history[dateGroup];
+      history.push(
+        <History key={dateGroup.toString()} min={value.minHumidity} max={value.maxHumidity} 
+          readings={value.readings} />)
+    }
+
+
+
+    return history;
+  }
+  
+  render() {
     return (
       <div id="app">
         <PageContainer>
             <Page>
-              {this.getTemperature()}
+              { this.getTemperatureHeader() }
               <section id="history">
-                { history }
+                { this.getTemperatureHistory() }
               </section>
             </Page>
             <Page>
@@ -129,7 +184,9 @@ class App extends React.Component  {
                 suffex={"%"}
                 date={formatDistance(this.state.lastReading.date, new Date())} 
                 image={"./water.svg"} />
-              <History />
+                <section id="history">
+                  { this.getHumidityHistory() }
+                </section>
             </Page>
         </PageContainer>
       </div>
