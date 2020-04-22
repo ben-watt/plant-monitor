@@ -18,9 +18,6 @@
         const range = this.range[max] - this.range[min];
         const domainRange = this.domain[max] - this.domain[min];
 
-        console.log(range);
-        console.log(domainRange);
-        
         return this.range[min] + ((value - this.domain[min]) * range / domainRange)
     }
  }

@@ -40,28 +40,12 @@
   height: 0.9em;
 }
 
-.day-row {
-  padding: 5px 15px 5px 15px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  cursor: pointer;
-}
-
-.day-row > div {
-  padding: 10px;
-}
-
-#day-line {
-  background-color: lightgrey;
-  height: 1px;
-}
-
 .arrow {
   visibility: hidden;
   padding: 0px;
   width: 5px;
   height: 5px;
+  margin: 1em;
   border-bottom: 1px solid grey;
   border-left: 1px solid grey;
   transform: rotate(45deg);
@@ -69,21 +53,9 @@
   transition-property: visibility, transform;
 }
 
-.day-row.active .arrow {
-  visibility: visible;
-  transform: rotate(-45deg);
-  transition-duration: 300ms;
-}
-
 .chart {
   display: hidden;
   height: 0em;
   box-shadow: inset 0px 0px 3px 1px grey;
-  transition-duration: 300ms;
-}
-
-.day-row.active + .chart {
-  display: block;
-  height: 10em;
   transition-duration: 300ms;
 }
