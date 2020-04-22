@@ -141,18 +141,11 @@ class App extends React.Component  {
         min={value.minTemperature} max={value.maxTemperature} readings={value.readings} />)
     }
 
-    return history;
-  }
-
-  normaliseDataZeroToOneHundred(value, min, max) {
-    return 0 + ((value - max) * (100 - 0) / (max - min))
+    return history.reverse();
   }
 
   getHumidityHistory() {
-    let history = []
-
-    console.log(this.normaliseDataZeroToOneHundred(
-      34, this.state.totalMinimumTemperature, this.state.totalHighestTemperature))
+    let history = [];
 
     for(var dateGroup in this.state.history) {
       let value = this.state.history[dateGroup];
