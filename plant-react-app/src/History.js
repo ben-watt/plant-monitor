@@ -21,7 +21,7 @@ const DayLine = styled.span`
 `
 
 const Day = styled.div`
-    width: 3em;
+    min-width: 3em;
     margin-right: 1em;
 `
 
@@ -74,7 +74,7 @@ class History extends React.Component {
             <>
                 <DayRow className={activeClass} onClick={this.openChart}>
                     <Day>{format(this.props.readings[0].date, "EEE")}</Day>
-                    <Container leftMargin={this.mapToRange(this.props.min, [0, 50])} rightMargin={this.mapToRange(this.props.max, [50, 0])}>
+                    <Container leftMargin={this.mapToRange(this.props.min, [0, 100])} rightMargin={this.mapToRange(this.props.max, [100, 0])}>
                         <div>{this.props.min}</div>
                         <DayLine></DayLine>
                         <div>{this.props.max}</div>

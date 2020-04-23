@@ -35,11 +35,11 @@ const HeaderContainer = styled.div`
 `
 
 const Image = styled.img`
-    width: 12em;
+    width: 7em;
     justify-self: flex-end;
     ${ props => props.bottom && css`
         position: relative; 
-        bottom: -1em
+        bottom: -2.8em
     `}
 `
 
