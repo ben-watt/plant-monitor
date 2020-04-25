@@ -3,12 +3,10 @@ import Chart from 'chart.js';
 import styled from 'styled-components';
 
 const ChartContainer = styled.div`
-	// position: relative;
-	// height: 10em;
+	position: relative;
+	height: 10em;
     display: block;
-	transition-duration: 300ms;
     box-shadow: inset 0px 0px 3px 1px grey;
-	transition-duration: 300ms;
 `
 
 class LineChart extends React.Component {
@@ -73,7 +71,7 @@ class LineChart extends React.Component {
 
     render() {
         return (
-            <ChartContainer ref={this.chartContainer} style={{ position: "relative", height: "140px"}}>
+            <ChartContainer ref={this.chartContainer} >
                 <canvas></canvas>
             </ChartContainer>
         )
