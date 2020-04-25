@@ -15,7 +15,6 @@ const Container = styled.div`
     display: flex;
     justify-content: space-evenly;
     padding-top: 4em;
-    margin: 0em 0em 1em 0em;
 `
 
 const Figure = styled.div`
