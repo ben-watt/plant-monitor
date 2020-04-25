@@ -8,12 +8,13 @@ import History from './History';
 import PageContainer from './PageContainer';
 import { formatDistance, getHours } from 'date-fns'
 import LineChart from './LineChart';
+import styled from 'styled-components';
 
 const parseReading = (reading) =>  ({
   date: new Date(reading.epoch_time * 1000),
   humidity: parseInt(reading.humidity.toFixed(0)),
   temperature: parseInt(reading.temperature.toFixed(0)),
-  voltage: reading.voltage.toString() ?? "Unknown"
+  voltage: (reading.voltage / 1000).toFixed(2),
 })
 
 const highestValue = (value1, value2) => {
@@ -24,6 +25,17 @@ const lowestValue = (value1, value2) => {
   return value1 < value2 ? value1 : value2;
 }
 
+const HeaderContainer = styled.div`
+  position: fixed;
+  width: calc(100% - 20px);
+  padding: 10px;
+  z-index: 1;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
 class App extends React.Component  {
   constructor(props) {
     super(props);
@@ -31,7 +43,8 @@ class App extends React.Component  {
       lastReading: {
         date: new Date(),
         humidity: "--",
-        temperature: "--"
+        temperature: "--",
+        voltage: "",
       },
       totalMaxTemperature: Number.MIN_SAFE_INTEGER,
       totalMinTemperature: Number.MAX_SAFE_INTEGER,
@@ -159,6 +172,13 @@ class App extends React.Component  {
   render() {
     return (
       <div id="app">
+        <HeaderContainer>
+            <div id="last-reading">{formatDistance(this.state.lastReading.date, new Date())} ago</div>
+            <div id="battery">
+                <span>{this.state.lastReading.voltage}</span>
+                <img src="./flash.svg"></img>
+            </div>
+        </HeaderContainer>
         <PageContainer>
             <Page>
               { this.getTemperatureHeader() }

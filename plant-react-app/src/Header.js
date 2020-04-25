@@ -27,13 +27,6 @@ const Suffex = styled.span`
     font-size: 0.5em;
 `
 
-const HeaderContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-`
-
 const Image = styled.img`
     width: 7em;
     height: 7em;
@@ -47,12 +40,6 @@ const Image = styled.img`
 const Header = (props) => {
     return (
         <Section leftColour={props.leftColour} rightColour={props.rightColour}>
-            <HeaderContainer>
-                <div id="last-reading">{props.date} ago</div>
-                    <div id="battery">
-                    <img src="./battery.svg"></img>
-                </div>
-            </HeaderContainer>
             <Container>
                 <Figure className="headline-figure">{props.value}<Suffex>{props.suffex}</Suffex></Figure>
                 <Image src={props.image} bottom={props.bottom}></Image>

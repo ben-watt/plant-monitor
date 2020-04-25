@@ -38,6 +38,7 @@
 
 #battery > img {
   height: 0.9em;
+  transform: rotate(20deg);
 }
 
 .arrow {
