@@ -9,7 +9,7 @@ const Day = styled.div`
 `
 
 const Range = styled.div`
-    font-weight: normal;
+    font-weight: thin;
     justify-self: end;
 `
 
