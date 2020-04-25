@@ -14,8 +14,8 @@ const Container = styled.div`
     align-items: center;
     display: flex;
     justify-content: space-evenly;
-    padding-top: 1em;
-    padding-bottom: 1em;
+    padding-top: 4em;
+    margin: 0em 0em 1em 0em;
 `
 
 const Figure = styled.div`
@@ -30,10 +30,9 @@ const Suffex = styled.span`
 const Image = styled.img`
     width: 7em;
     height: 7em;
-    justify-self: flex-end;
+    justify-self: end;
     ${ props => props.bottom && css`
-        position: relative; 
-        bottom: -2.8em
+        align-self: flex-end;
     `}
 `
 
@@ -41,7 +40,9 @@ const Header = (props) => {
     return (
         <Section leftColour={props.leftColour} rightColour={props.rightColour}>
             <Container>
-                <Figure className="headline-figure">{props.value}<Suffex>{props.suffex}</Suffex></Figure>
+                <Figure className="headline-figure">
+                    {props.value}<Suffex>{props.suffex}</Suffex>
+                </Figure>
                 <Image src={props.image} bottom={props.bottom}></Image>
             </Container>
         </Section>
