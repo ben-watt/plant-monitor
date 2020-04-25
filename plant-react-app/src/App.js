@@ -7,6 +7,7 @@ import Header from './Header';
 import History from './History';
 import PageContainer from './PageContainer';
 import { formatDistance, getHours } from 'date-fns'
+import LineChart from './LineChart';
 
 const parseReading = (reading) =>  ({
   date: new Date(reading.epoch_time * 1000),
@@ -87,19 +88,6 @@ class App extends React.Component  {
     }.bind(this));
   }
 
-  drawChart() {
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myLineChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          datasets: [{
-            data: [10, 20, 30, 40, 50, 60]
-          }],
-          labels: ['January', 'February', 'March', 'April', 'May', 'June']
-        }
-    });
-  }
-
   getTemperatureHeader() {
     var date = new Date();
     var hours = getHours(date);
@@ -128,14 +116,19 @@ class App extends React.Component  {
     let history = []
     for(var dateGroup in this.state.history) {
       let value = this.state.history[dateGroup];
+      let chartData = value.readings.map(reading => ({ x: reading.date, y: reading.temperature }))
 
       history.push(
         <History key={dateGroup.toString()} 
-          totalMin={this.state.totalMinTemperature} totalMax={this.state.totalMaxTemperature}
-          min={value.minTemperature} max={value.maxTemperature} 
-          readings={value.readings} />)
+          totalMin={this.state.totalMinTemperature} 
+          totalMax={this.state.totalMaxTemperature}
+          min={value.minTemperature} 
+          max={value.maxTemperature} 
+          date={value.readings[0].date} 
+          chart={() => { 
+            return <LineChart data={chartData} colour={"#40DA46"} />
+          }} />)
     }
-
     return history.reverse();
   }
 
@@ -144,14 +137,21 @@ class App extends React.Component  {
 
     for(var dateGroup in this.state.history) {
       let value = this.state.history[dateGroup];
+      let chartData = value.readings.map(reading => ({ x: reading.date, y: reading.humidity }))
+
       history.push(
         <History key={dateGroup.toString()} 
-          totalMin={this.state.totalMinHumidity} totalMax={this.state.totalMaxHumidity}
-          min={value.minHumidity} max={value.maxHumidity} 
-          readings={value.readings} />)
+          totalMin={this.state.totalMinHumidity} 
+          totalMax={this.state.totalMaxHumidity}
+          min={value.minHumidity} 
+          max={value.maxHumidity} 
+          date={value.readings[0].date} 
+          chart={() => { 
+            return <LineChart data={chartData} colour={"#CD10DD"} />
+          }} />)
     }
 
-    return history;
+    return history.reverse();
   }
   
   render() {

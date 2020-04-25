@@ -37,12 +37,6 @@ const DayRow = styled.div`
         transform: rotate(-45deg);
         transition-duration: 300ms;
     }
-
-    &.active + .chart {
-        display: block;
-        height: 10em;
-        transition-duration: 300ms;
-    }
 `
 class History extends React.Component {
     constructor(props) {
@@ -52,7 +46,7 @@ class History extends React.Component {
         }
     }
 
-    openChart = (ev) => {
+    openChart = () => {
         this.setState(prevState => ({ active: !prevState.active }));
     }
 
@@ -73,7 +67,7 @@ class History extends React.Component {
         return (
             <>
                 <DayRow className={activeClass} onClick={this.openChart}>
-                    <Day>{format(this.props.readings[0].date, "EEE")}</Day>
+                    <Day>{format(this.props.date, "EEE")}</Day>
                     <Container leftMargin={this.mapToRange(this.props.min, [0, 100])} rightMargin={this.mapToRange(this.props.max, [100, 0])}>
                         <div>{this.props.min}</div>
                         <DayLine></DayLine>
@@ -83,8 +77,7 @@ class History extends React.Component {
                         <div className="arrow"></div>
                     </div>
                 </DayRow>
-                <div className="chart">
-                </div>
+                {this.state.active && this.props.chart()}
             </>
         )
     }

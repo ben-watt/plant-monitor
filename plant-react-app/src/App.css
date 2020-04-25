@@ -52,10 +52,3 @@
   transition-duration: 200ms;
   transition-property: visibility, transform;
 }
-
-.chart {
-  display: hidden;
-  height: 0em;
-  box-shadow: inset 0px 0px 3px 1px grey;
-  transition-duration: 300ms;
-}
