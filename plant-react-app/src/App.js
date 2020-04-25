@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import firebase from './Firebase.js';
-import Chart from 'chart.js';
 import Page from './Page';
 import Header from './Header';
 import History from './History';

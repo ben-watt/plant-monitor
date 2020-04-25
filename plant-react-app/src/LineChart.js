@@ -39,7 +39,8 @@ class LineChart extends React.Component {
                     display: false,
                 },
                 tooltips: {
-                    enabled: true
+					enabled: true,
+					intersect: false,
 				},
 				layout: {
 					padding: {
