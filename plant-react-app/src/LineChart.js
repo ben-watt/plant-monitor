@@ -3,10 +3,10 @@ import Chart from 'chart.js';
 import styled from 'styled-components';
 
 const ChartContainer = styled.div`
-	position: relative;
+	display: block;
+	box-shadow: inset 0px 0px 3px 1px grey;
 	height: 10em;
-    display: block;
-    box-shadow: inset 0px 0px 3px 1px grey;
+	position: relative;
 `
 
 class LineChart extends React.Component {
@@ -40,14 +40,22 @@ class LineChart extends React.Component {
                 },
                 tooltips: {
                     enabled: true
-                },
+				},
+				layout: {
+					padding: {
+						left: 0,
+						right: 0,
+						top: 8,
+						bottom: 8
+					}
+				},
 				responsive: true,
 				scales: {
 					xAxes: [{
 						type: 'time',
 						display: false,
 						scaleLabel: {
-							display: false,
+							display: true,
 						},
 						ticks: {
 							major: {

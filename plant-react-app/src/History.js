@@ -1,34 +1,22 @@
 import React from 'react';
-import { format } from 'date-fns'
+import { format, isToday, isYesterday } from 'date-fns'
 import styled from 'styled-components';
 import Normaliser from './Normaliser';
-
-const Container = styled.div`
-    display: flex;
-    align-items: center;
-    width: 100%;
-    min-width: 70px;
-    padding-left: calc(${props => props.leftMargin.toFixed(0)}% - 70px);
-    padding-right: calc(${props => props.rightMargin.toFixed(0)}% - 70px);
-`
-
-const DayLine = styled.span`
-    background-color: lightgrey;
-    height: 1px;
-    width: 100%;
-    padding: 0em 0.5em 0em 0.5em;
-    margin: 0.5em;
-`
 
 const Day = styled.div`
     min-width: 3em;
     margin-right: 1em;
 `
 
+const Range = styled.div`
+    font-weight: normal;
+    justify-self: end;
+`
+
 const DayRow = styled.div`
     padding: 5px 15px 5px 15px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     cursor: pointer;
 
@@ -57,6 +45,15 @@ class History extends React.Component {
             .normalise(value);
     }
 
+    displayDate = (date) => {
+        if(isToday(date))
+            return "Today";
+        else if(isYesterday(date))
+            return "Yesterday";
+        else
+            return format(this.props.date, "EEEE");
+    }
+
     render() {
         let activeClass = "";
 
@@ -67,15 +64,11 @@ class History extends React.Component {
         return (
             <>
                 <DayRow className={activeClass} onClick={this.openChart}>
-                    <Day>{format(this.props.date, "EEE")}</Day>
-                    <Container leftMargin={this.mapToRange(this.props.min, [0, 100])} rightMargin={this.mapToRange(this.props.max, [100, 0])}>
-                        <div>{this.props.min}</div>
-                        <DayLine></DayLine>
-                        <div>{this.props.max}</div>
-                    </Container>
+                    <Day>{this.displayDate(this.props.date)}</Day>
                     <div>
                         <div className="arrow"></div>
                     </div>
+                    <Range>{this.props.min}-{this.props.max}{this.props.suffex}</Range>
                 </DayRow>
                 {this.state.active && this.props.chart()}
             </>

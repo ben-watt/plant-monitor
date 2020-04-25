@@ -124,6 +124,7 @@ class App extends React.Component  {
           totalMax={this.state.totalMaxTemperature}
           min={value.minTemperature} 
           max={value.maxTemperature} 
+          suffex={"°C"}
           date={value.readings[0].date} 
           chart={() => { 
             return <LineChart data={chartData} colour={"#40DA46"} />
@@ -145,6 +146,7 @@ class App extends React.Component  {
           totalMax={this.state.totalMaxHumidity}
           min={value.minHumidity} 
           max={value.maxHumidity} 
+          suffex={"%"}
           date={value.readings[0].date} 
           chart={() => { 
             return <LineChart data={chartData} colour={"#CD10DD"} />
