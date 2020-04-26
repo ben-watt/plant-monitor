@@ -25,7 +25,7 @@ const lowestValue = (value1, value2) => {
 }
 
 const HeaderContainer = styled.div`
-  position: fixed;
+  position: absolute;
   width: calc(100% - 20px);
   padding: 10px;
   z-index: 1;
