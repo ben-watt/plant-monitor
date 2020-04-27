@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Chart from 'chart.js';
 import styled from 'styled-components';
 
@@ -50,7 +50,6 @@ class LineChart extends React.Component {
 						bottom: 8
 					}
 				},
-				responsive: true,
 				scales: {
 					xAxes: [{
 						type: 'time',

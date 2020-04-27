@@ -7,7 +7,7 @@ class PageContainer extends React.Component {
 
         let pageCount = 0;
         props.children.forEach(child => {
-            if(child.type.name == Page.name) {
+            if(child.type.name === Page.name) {
                 pageCount++;
             }
         })
@@ -41,12 +41,14 @@ class PageContainer extends React.Component {
 
     render(){
         let pageIcons = this.props.children.map((child, i) => {
-            if(child.type.name == Page.name) {
+            if(child.type.name === Page.name) {
                 let classes = ["page-icon"];
-                if(i + 1 == this.state.currentPage) {
+                if(i + 1 === this.state.currentPage) {
                     classes.push("active");
                 }
                 return <div key={i} className={classes.join(" ")}></div>
+            } else {
+                return null;
             }
         });
 

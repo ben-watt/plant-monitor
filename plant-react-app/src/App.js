@@ -54,17 +54,17 @@ class App extends React.Component  {
   }
 
   componentDidMount() {
-    var db = firebase.database();
-    var data = db.ref("greenhouse/data").limitToLast(1);
+    let db = firebase.database();
+    let data = db.ref("greenhouse/data").limitToLast(1);
 
     data.on('child_added', function(d) {
       var reading = d.val();
       this.setState({ lastReading : parseReading(reading)})
     }.bind(this));
 
-    var data = db.ref("greenhouse/data").limitToLast(100);
+    let historyData = db.ref("greenhouse/data").limitToLast(100);
 
-    data.on('child_added', function(d) {
+    historyData.on('child_added', function(d) {
       var reading = d.val();
       var parsedReading = parseReading(reading);
       var dateKey = parsedReading.date.toISOString().substring(0,10);
@@ -175,7 +175,7 @@ class App extends React.Component  {
             <div id="last-reading">{formatDistance(this.state.lastReading.date, new Date())} ago</div>
             <div id="battery">
                 <span>{this.state.lastReading.voltage}</span>
-                <img src="./flash.svg"></img>
+                <img src="./flash.svg" alt="battery"></img>
             </div>
         </HeaderContainer>
         <PageContainer>
