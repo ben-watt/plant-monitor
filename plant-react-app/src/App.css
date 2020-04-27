@@ -9,31 +9,45 @@
   display: flex;
 }
 
-.page {
-  min-width: 100%;
-  min-height: 100vh;     
-  transform: translate(calc(var(--pageIndex) * -100% )); 
-  transition-duration: 50ms;
+
+@media (max-width: 1000px) {
+  .page {
+    min-width: 100%;
+    min-height: 100vh;     
+    transform: translate(calc(var(--pageIndex) * -100% )); 
+    transition-duration: 50ms;
+  }
+
+  .page-icons {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+  }
+  
+  .page-icon {
+    margin: 5px 3px 5px 3px;
+    border-radius: 1em;
+    width: 5px;
+    height: 5px;
+    border: 1px solid grey;
+  }
+  
+  .page-icon.active {
+    background-color: grey;
+  }
 }
 
-.page-icons {
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
-}
+@media (min-width: 1000px) {
+  .page {
+    min-width: 50%;
+    min-height: 100vh;
+  }
 
-.page-icon {
-  margin: 5px 3px 5px 3px;
-  border-radius: 1em;
-  width: 5px;
-  height: 5px;
-  border: 1px solid grey;
-}
-
-.page-icon.active {
-  background-color: grey;
+  .page-icons {
+    display: none;
+  }
 }
 
 #battery > img {
