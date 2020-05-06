@@ -62,12 +62,17 @@ class App extends React.Component  {
       this.setState({ lastReading : parseReading(reading)})
     }.bind(this));
 
-    let historyData = db.ref("greenhouse/data").limitToLast(1000);
+    let historyData = db.ref("greenhouse/data").limitToLast(200);
 
     historyData.on('child_added', function(d) {
       var reading = d.val();
       var parsedReading = parseReading(reading);
       var dateKey = parsedReading.date.toISOString().substring(0,10);
+
+      // Ignore bad readings which is the default unix time
+      if(dateKey === "1970-01-01") {
+        return;
+      }
 
       this.setState(prevState => {
         if(prevState.history[dateKey] != null) {
