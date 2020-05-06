@@ -62,7 +62,7 @@ class App extends React.Component  {
       this.setState({ lastReading : parseReading(reading)})
     }.bind(this));
 
-    let historyData = db.ref("greenhouse/data").limitToLast(100);
+    let historyData = db.ref("greenhouse/data").limitToLast(1000);
 
     historyData.on('child_added', function(d) {
       var reading = d.val();
