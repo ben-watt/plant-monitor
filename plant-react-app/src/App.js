@@ -54,15 +54,16 @@ class App extends React.Component  {
   }
 
   componentDidMount() {
+    let dataEndpoint = "greenhouse/data_v2";
     let db = firebase.database();
-    let data = db.ref("greenhouse/data").limitToLast(1);
+    let data = db.ref(dataEndpoint).limitToLast(1);
 
     data.on('child_added', function(d) {
       var reading = d.val();
       this.setState({ lastReading : parseReading(reading)})
     }.bind(this));
 
-    let historyData = db.ref("greenhouse/data").orderByChild("epoch_time").limitToLast(300);
+    let historyData = db.ref(dataEndpoint).orderByChild("epoch_time").limitToLast(300);
 
     historyData.on('child_added', function(d) {
       var reading = d.val();
